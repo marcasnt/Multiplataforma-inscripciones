@@ -1,6 +1,6 @@
-# 🏆 FENIFISC - Sistema de Inscripción Campeonato Departamental del Norte 2026
+# 🏆 FENIFISC - Sistema de Inscripción Campeonato Nacional Potosi, Rivas 2026
 
-Sitio web profesional y moderno para inscripciones del **Campeonato Departamental de Fisicoculturismo del Norte de Matagalpa 2026**, organizado por FENIFISC.
+Sitio web profesional y moderno para inscripciones del **Campeonato Campeonato Nacional Potosi, Rivas 2026**, organizado por FENIFISC.
 
 ---
 
@@ -68,7 +68,7 @@ Con instrucciones detalladas con imágenes:
 ### 2️⃣ Crear Google Sheet
 ```
 1. sheets.google.com → Nuevo Spreadsheet
-2. Nombra: "Inscripciones Campeonato 2026"
+2. Nombra: "Inscripciones Campeonato Nacional Potosi, Rivas 2026"
 3. Crea los encabezados (ver documentación)
 4. Copia el SHEET_ID
 ```
@@ -179,7 +179,7 @@ FENIFISC-Inscripciones-2026/
 - Degradados suaves y sombras modernas
 
 - Protegido bajo reglas IFBB
-- Organizado por FENIFISC, IND y Asociación Departamental de Matagalpa
+- Organizado por FENIFISC, IND y Alcaldia Municipal de Potosi, Rivas
 - Los datos de los inscritos son confidenciales
 - Las fotos son para verificación de identidad
 
@@ -209,8 +209,8 @@ FENIFISC-Inscripciones-2026/
 ## 🏆 ¡Que comience el Campeonato!
 
 **Versión:** 1.0
-**Actualizado:** 15 de Diciembre, 2025
+**Actualizado:** 23 de Marzo, 2026
 **Estado:** Listo para Producción
 
-¡Bienvenidos al Campeonato Departamental del Norte 2026! 🎉
+¡Bienvenidos al Campeonato Nacional Potosi, Rivas 2026! 🎉
 
