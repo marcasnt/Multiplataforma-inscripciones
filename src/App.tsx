@@ -236,7 +236,7 @@ export default function App() {
     try {
       const payload = {
         ...form,
-        evento: "Campeonato Departamental del Sur de Fisicoculturismo 2026 - Potosí, Rivas",
+        evento: "Campeonato Nacional de Fisicoculturismo Rivas 'En honor al día Del deportista' 2026 - Potosí, Rivas",
         fotoSelfie: {
           base64: photos.selfie.base64,
           name: "selfie.jpg",
@@ -289,7 +289,7 @@ export default function App() {
           </div>
           <h2 className="text-3xl font-bold text-white mb-2">¡Inscripción Exitosa!</h2>
           <p className="text-gray-400 mb-8">
-            Tu registro para el Campeonato Departamental del Sur 2026 ha sido procesado. Te esperamos el domingo 19 de Abril a las 4:00 PM.
+            Tu registro para el Campeonato Nacional de Fisicoculturismo Rivas "En honor al día Del deportista" 2026 ha sido procesado. Te esperamos el domingo 19 de Abril a las 5:00 PM.
           </p>
           <button
             onClick={() => window.location.reload()}
@@ -355,8 +355,10 @@ export default function App() {
           />
         </div>
         <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-2">
-          CAMPEONATO <span className="text-amber-500">DEL SUR</span>
+          CAMPEONATO <span className="text-amber-500">NACIONAL</span>
         </h1>
+        <p className="text-amber-200/80 font-semibold text-base mb-1">Fisicoculturismo Rivas</p>
+        <p className="text-amber-200/50 italic text-sm mb-1">"En honor al día Del deportista"</p>
         <p className="text-amber-200/60 font-bold tracking-[0.5em] uppercase text-sm">Potosí, Rivas 2026</p>
       </header>
 
@@ -537,8 +539,8 @@ export default function App() {
               <div className="bg-amber-500/5 border border-amber-500/20 rounded-2xl p-4 mt-4 flex gap-4">
                 <AlertCircle className="w-6 h-6 text-amber-500 shrink-0" />
                 <p className="text-amber-200/70 text-xs leading-relaxed">
-                  El pesaje oficial será de 12:00 MD a 1:00 PM en el Polideportivo de Potosí, Rivas (mismo lugar del evento).
-                  Favor presentarse con puntualidad y vestimenta adecuada.
+                  El pesaje oficial será de 12:00 MD a 3:00 PM en el Polideportivo de Potosí, Rivas (mismo lugar del evento).
+                  El evento inicia a las 5:00 PM. Favor presentarse con puntualidad y vestimenta adecuada.
                 </p>
               </div>
             </div>
@@ -682,7 +684,7 @@ export default function App() {
               <div className="space-y-4">
                 {[
                   { id: "aceptaReglamento", text: "Acepto el reglamento oficial de la IFBB y FENIFISC." },
-                  { id: "aceptaHorario", text: "Confirmo que el pesaje es de 12:00 MD a 1:00 PM en el Polideportivo de Potosí, Rivas y seré puntual. De lo contrario sere penalizado con una multa." },
+                  { id: "aceptaHorario", text: "Confirmo que el pesaje es de 12:00 MD a 3:00 PM en el Polideportivo de Potosí, Rivas y el evento inicia a las 5:00 PM. Seré puntual, de lo contrario seré penalizado con una multa." },
                   { id: "autorizaDatos", text: "Autorizo el uso de mi imagen y datos para fines del evento, y FENIFISC estime conveniente." }
                 ].map((item) => (
                   <label
@@ -743,7 +745,7 @@ export default function App() {
 
         {/* Footer Info */}
         <footer className="mt-12 text-center text-gray-600 text-xs">
-          <p className="mb-2">Federación Nicaragüense de Fisicoculturismo • Potosí, Rivas 2026</p>
+          <p className="mb-2">Federación Nicaragüense de Fisicoculturismo (FENIFISC) • Instituto Nicaragüense de Deportes (IND) • Alcaldía Municipal de Potosí, Rivas 2026</p>
           <p>© Todos los derechos reservados</p>
         </footer>
       </main>
