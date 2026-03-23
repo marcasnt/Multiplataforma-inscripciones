@@ -355,11 +355,11 @@ export default function App() {
           />
         </div>
         <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-2">
-          CAMPEONATO <span className="text-amber-500">NACIONAL</span>
+          CAMPEONATO <span className="text-amber-500">NACIONAL DE FISICO CULTURISMO</span>
         </h1>
-        <p className="text-amber-200/80 font-semibold text-base mb-1">Fisicoculturismo Rivas</p>
-        <p className="text-amber-200/50 italic text-sm mb-1">"En honor al día Del deportista"</p>
         <p className="text-amber-200/60 font-bold tracking-[0.5em] uppercase text-sm">Potosí, Rivas 2026</p>
+        <p className="text-amber-200/50 italic text-sm mb-1">"En honor al día Del deportista"</p>
+
       </header>
 
       {/* Main Content */}
@@ -425,8 +425,8 @@ export default function App() {
                         key={s}
                         onClick={() => updateField("sexo", s.toLowerCase())}
                         className={`py-3 rounded-xl border transition-all ${form.sexo === s.toLowerCase()
-                            ? "bg-amber-500/10 border-amber-500 text-amber-500"
-                            : "border-gray-700 bg-gray-900/50 text-gray-400 hover:border-gray-600"
+                          ? "bg-amber-500/10 border-amber-500 text-amber-500"
+                          : "border-gray-700 bg-gray-900/50 text-gray-400 hover:border-gray-600"
                           }`}
                       >
                         {s}
