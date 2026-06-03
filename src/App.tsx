@@ -20,7 +20,7 @@ import {
 // ============================================================
 // CONFIGURATION & CONSTANTS
 // ============================================================
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwu_u9NUOsgkLz75Bonk8HcQpSQDL4O3bbNmZervxys1_tFe5Lb9yDGwIDpBOToiEV3/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYP2wlWIFQLQkPlLHCQb58IRuKb-S6EGhirJXnvusOmCiapMfs3k9UZGi59Go7O7zLxA/exec";
 
 const DEPARTAMENTOS_NI = [
   "Matagalpa", "Jinotega", "Estelí", "Madriz", "Nueva Segovia",
@@ -236,7 +236,7 @@ export default function App() {
     try {
       const payload = {
         ...form,
-        evento: "Campeonato Nacional de Fisicoculturismo Rivas 'En honor al día Del deportista' 2026 - Potosí, Rivas",
+        evento: "Campeonato Nacional de Fisicoculturismo Rivas 'En honor a la semana olimpica' 2026 - Rivas, Rivas",
         fotoSelfie: {
           base64: photos.selfie.base64,
           name: "selfie.jpg",
@@ -276,7 +276,7 @@ export default function App() {
       <div className="min-h-screen bg-gray-950 flex items-center justify-center p-6">
         <div className="max-w-md w-full bg-gray-900 border border-amber-500/30 rounded-3xl p-8 text-center shadow-2xl">
           <img
-            src="https://fenifisc.com/wp-content/uploads/2024/12/FENIFISC-OFICIAL.webp"
+            src="https://fenifisc.com/logo-fenifisc.png"
             alt="FENIFISC"
             className="w-20 h-20 mx-auto mb-6 rounded-full border-2 border-amber-500/40 bg-gray-800 p-1 object-contain"
             loading="lazy"
@@ -289,7 +289,7 @@ export default function App() {
           </div>
           <h2 className="text-3xl font-bold text-white mb-2">¡Inscripción Exitosa!</h2>
           <p className="text-gray-400 mb-8">
-            Tu registro para el Campeonato Nacional de Fisicoculturismo Rivas "En honor al día Del deportista" 2026 ha sido procesado. Te esperamos el domingo 19 de Abril a las 5:00 PM.
+            Tu registro para el Campeonato Nacional de Fisicoculturismo Rivas "En honor a la semana olimpica" 2026 ha sido procesado. Te esperamos el domingo 21 de Junio a las 5:00 PM.
           </p>
           <button
             onClick={() => window.location.reload()}
@@ -333,7 +333,7 @@ export default function App() {
             <div className="text-left">
               <h3 className="text-red-400 font-bold text-sm">⚠️ FECHA LÍMITE DE INSCRIPCIONES</h3>
               <p className="text-red-300 text-xs mt-1">
-                Las inscripciones cierran el <strong>lunes 13 de abril de 2026</strong>.
+                Las inscripciones cierran el <strong>lunes 14 de Junio de 2026</strong>.
                 Después de esta fecha no se aceptarán más inscripciones.
               </p>
             </div>
@@ -345,7 +345,7 @@ export default function App() {
             <div className="w-40 h-40 bg-linear-to-br from-amber-400/10 via-amber-500/5 to-amber-600/10 rounded-full" />
           </div>
           <img
-            src="https://fenifisc.com/wp-content/uploads/2024/12/FENIFISC-OFICIAL.webp"
+            src="https://fenifisc.com/logo-fenifisc.png"
             alt="FENIFISC Logo"
             className="relative w-36 h-36 rounded-full border-3 border-amber-500/40 p-2 bg-gray-900/80 object-contain"
             loading="lazy"
@@ -357,8 +357,8 @@ export default function App() {
         <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-2">
           CAMPEONATO <span className="text-amber-500">NACIONAL DE FISICO CULTURISMO</span>
         </h1>
-        <p className="text-amber-200/60 font-bold tracking-[0.5em] uppercase text-sm">Potosí, Rivas 2026</p>
-        <p className="text-amber-200/50 italic text-sm mb-1">"En honor al día Del deportista"</p>
+        <p className="text-amber-200/60 font-bold tracking-[0.5em] uppercase text-sm">Rivas 2026</p>
+        <p className="text-amber-200/50 italic text-sm mb-1">"En honor a la semana olimpica"</p>
 
       </header>
 
@@ -539,7 +539,7 @@ export default function App() {
               <div className="bg-amber-500/5 border border-amber-500/20 rounded-2xl p-4 mt-4 flex gap-4">
                 <AlertCircle className="w-6 h-6 text-amber-500 shrink-0" />
                 <p className="text-amber-200/70 text-xs leading-relaxed">
-                  El pesaje oficial será de 12:00 MD a 3:00 PM en el Polideportivo de Potosí, Rivas (mismo lugar del evento).
+                  El pesaje oficial será de 12:00 MD a 3:00 PM Plaza Carlos Fonseca Rivas, Rivas (mismo lugar del evento).
                   El evento inicia a las 5:00 PM. Favor presentarse con puntualidad y vestimenta adecuada.
                 </p>
               </div>
@@ -684,7 +684,7 @@ export default function App() {
               <div className="space-y-4">
                 {[
                   { id: "aceptaReglamento", text: "Acepto el reglamento oficial de la IFBB y FENIFISC." },
-                  { id: "aceptaHorario", text: "Confirmo que el pesaje es de 12:00 MD a 3:00 PM en el Polideportivo de Potosí, Rivas y el evento inicia a las 5:00 PM. Seré puntual, de lo contrario seré penalizado con una multa." },
+                  { id: "aceptaHorario", text: "Confirmo que el pesaje es de 12:00 MD a 3:00 PM Plaza Carlos Fonseca Rivas, Rivas y el evento inicia a las 5:00 PM. Seré puntual, de lo contrario seré penalizado con una multa." },
                   { id: "autorizaDatos", text: "Autorizo el uso de mi imagen y datos para fines del evento, y FENIFISC estime conveniente." }
                 ].map((item) => (
                   <label
@@ -745,7 +745,7 @@ export default function App() {
 
         {/* Footer Info */}
         <footer className="mt-12 text-center text-gray-600 text-xs">
-          <p className="mb-2">Federación Nicaragüense de Fisicoculturismo (FENIFISC) • Instituto Nicaragüense de Deportes (IND) • Alcaldía Municipal de Potosí, Rivas 2026</p>
+          <p className="mb-2">Federación Nicaragüense de Fisicoculturismo (FENIFISC) • Instituto Nicaragüense de Deportes (IND) • Alcaldía Municipal de Rivas, Movimiento Deportivo Alexis Argüello de la ciudad de Rivas 2026</p>
           <p>© Todos los derechos reservados</p>
         </footer>
       </main>
