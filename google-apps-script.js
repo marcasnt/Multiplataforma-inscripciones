@@ -66,6 +66,24 @@ function doGet(e) {
 }
 
 // ============================================================
+// FUNCIÓN PARA EJECUTAR MANUALMENTE EN EL DROPDOWN (SIN PARÁMETROS)
+// ============================================================
+
+function inicializarEventosManual() {
+  const spreadsheet = SpreadsheetApp.openById(SHEET_ID);
+  let sheet = spreadsheet.getSheetByName("Eventos");
+  
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet("Eventos");
+  } else {
+    sheet.clear(); // Limpia la hoja si ya existe para no duplicar
+  }
+  
+  inicializarEventosDemo(sheet);
+  Logger.log("✅ Pestaña 'Eventos' inicializada con éxito.");
+}
+
+// ============================================================
 // FUNCIÓN AUXILIAR: Inicializar eventos por defecto
 // ============================================================
 
