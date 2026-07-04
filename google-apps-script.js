@@ -2,13 +2,13 @@
 // CONFIGURACIÓN - REEMPLAZA ESTOS VALORES
 // ============================================================
 
-const SHEET_ID = "1kYhZxMIgJcfYtd4uHw2ctuH3aDepknUpy1Oce80WCJo";  // ID del Google Sheet "Inscripciones Campeonato Regional Matagalpa 2026"
+const SHEET_ID = "1NayeOJSdWubRdJbDWKjoMbnTp0Y3KbZ-YhSrC75s5XM";  // ID del Google Sheet oficial
 
 // ID de la carpeta principal de Google Drive donde se guardarán las fotos de los atletas
-const MAIN_DRIVE_FOLDER_ID = "1iVQFPQTgbGsIXF6SZDSciBSdLWu9Ti6Z";
+const MAIN_DRIVE_FOLDER_ID = "1aYiUgtltUMAPntJ6WLlAnFV0gOruiV-l";
 
-// Email para notificaciones (opcional)
-const ADMIN_EMAIL = "tu_email@gmail.com";
+// Email para notificaciones
+const ADMIN_EMAIL = "marcasnt@gmail.com";
 
 // ============================================================
 // FUNCIÓN PRINCIPAL GET: Obtener eventos activos
