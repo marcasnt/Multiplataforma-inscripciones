@@ -994,6 +994,11 @@ export default function App() {
                 />
               </div>
 
+              <p className="text-amber-500/90 text-sm font-bold mb-4 flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-amber-500" />
+                Para finalizar, acepte los términos y condiciones obligatorios para su registro:
+              </p>
+
               <div className="space-y-4">
                 {[
                   { id: "aceptaReglamento", text: "Acepto el reglamento oficial de la IFBB y FENIFISC." },
@@ -1002,15 +1007,25 @@ export default function App() {
                 ].map((item) => (
                   <label
                     key={item.id}
-                    className={`flex items-start gap-4 p-4 rounded-2xl border cursor-pointer transition-all ${(form as any)[item.id] ? "bg-amber-500/10 border-amber-500" : "bg-gray-900/50 border-gray-700"
+                    className={`flex items-start gap-4 p-4 rounded-2xl border cursor-pointer transition-all ${(form as any)[item.id] ? "bg-amber-500/10 border-amber-500" : "bg-gray-900/50 border-gray-700 hover:border-gray-600"
                       }`}
                   >
                     <input
                       type="checkbox"
-                      className="mt-1 accent-amber-500"
+                      className="sr-only"
                       checked={(form as any)[item.id]}
                       onChange={(e) => updateField(item.id, e.target.checked)}
                     />
+                    
+                    {/* Checkbox Visual Personalizado */}
+                    <div className={`mt-0.5 w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all shrink-0 ${
+                      (form as any)[item.id]
+                        ? "bg-amber-500 border-amber-500 text-black scale-105"
+                        : "border-gray-500 bg-gray-950"
+                    }`}>
+                      {(form as any)[item.id] && <Check className="w-3.5 h-3.5 stroke-[3.5px]" />}
+                    </div>
+
                     <span className="text-sm text-gray-300 leading-snug">{item.text}</span>
                   </label>
                 ))}
@@ -1065,6 +1080,40 @@ export default function App() {
           <p>© Todos los derechos reservados</p>
         </footer>
       </main>
+
+      {/* Full-screen Loading Overlay */}
+      {loading && (
+        <div className="fixed inset-0 bg-black/85 backdrop-blur-md flex flex-col items-center justify-center z-50 animate-in fade-in duration-300">
+          <div className="max-w-md w-full p-6 text-center space-y-6">
+            {/* Spinner */}
+            <div className="relative w-24 h-24 mx-auto flex items-center justify-center">
+              {/* Logo inside spinner */}
+              <div className="absolute inset-2 bg-gray-950 rounded-full flex items-center justify-center p-3 z-10">
+                <img
+                  src="https://fenifisc.com/logo-fenifisc.png"
+                  alt="FENIFISC"
+                  className="w-full h-full object-contain animate-pulse"
+                />
+              </div>
+              <div className="absolute inset-0 rounded-full border-4 border-amber-500/10 border-t-amber-500 animate-spin" />
+            </div>
+            
+            <div className="space-y-2">
+              <h3 className="text-2xl font-bold text-white tracking-tight">Enviando tu registro...</h3>
+              <p className="text-gray-400 text-sm leading-relaxed">
+                Estamos procesando tus datos y subiendo tus fotos de validación de forma segura a Google Drive y Sheets.
+              </p>
+            </div>
+            
+            <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 flex gap-3 text-left">
+              <AlertCircle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+              <p className="text-amber-200/80 text-xs leading-relaxed">
+                <strong>Importante:</strong> Este proceso puede tomar entre 5 y 15 segundos debido a la carga de tus documentos. Por favor, <strong>no cierres ni recargues</strong> esta página.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

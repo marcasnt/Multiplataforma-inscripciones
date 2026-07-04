@@ -80,8 +80,8 @@ img {
   transform: translateZ(0);
 }
 
-/* Optimización de inputs para Safari iOS */
-input, textarea, select {
+/* Optimización de inputs para Safari (excluyendo checkbox/radio) */
+input:not([type="checkbox"]):not([type="radio"]), textarea, select {
   -webkit-appearance: none;
   appearance: none;
   border-radius: 0;
