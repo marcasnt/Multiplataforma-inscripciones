@@ -8,7 +8,7 @@
     transform: none !important;
   }
   
-  .hover\\:scale-105:hover {
+  .hover\:scale-105:hover {
     transform: scale(1.02) !important;
   }
 }

@@ -3,46 +3,162 @@
 // ============================================================
 
 const SHEET_ID = "1kYhZxMIgJcfYtd4uHw2ctuH3aDepknUpy1Oce80WCJo";  // ID del Google Sheet "Inscripciones Campeonato Regional Matagalpa 2026"
-const SHEET_NAME = "Hoja 1";  // Nombre de la hoja principal
 
-// IDs de carpetas de Google Drive para guardar fotos
-const DRIVE_FOLDERS = {
-  selfies: "1iVQFPQTgbGsIXF6SZDSciBSdLWu9Ti6Z",        // ID carpeta SELFIES
-  cedulaFrente: "1PJ2ZdOFxABR5tUbhp3a9aBplFb_hCPJt",    // ID carpeta CEDULA_FRENTE
-  cedulaReverso: "1Vcnch4JcRgA9tZ3lP3izEZJE7_0ifo3o"    // ID carpeta CEDULA_REVERSO
-};
+// ID de la carpeta principal de Google Drive donde se guardarán las fotos de los atletas
+const MAIN_DRIVE_FOLDER_ID = "1iVQFPQTgbGsIXF6SZDSciBSdLWu9Ti6Z";
 
 // Email para notificaciones (opcional)
 const ADMIN_EMAIL = "tu_email@gmail.com";
 
 // ============================================================
-// FUNCIÓN PRINCIPAL: recibir datos del formulario
+// FUNCIÓN PRINCIPAL GET: Obtener eventos activos
+// ============================================================
+
+function doGet(e) {
+  try {
+    const spreadsheet = SpreadsheetApp.openById(SHEET_ID);
+    let sheet = spreadsheet.getSheetByName("Eventos");
+    
+    // Si la pestaña de "Eventos" no existe, la inicializamos con datos de ejemplo de Julio y Agosto
+    if (!sheet) {
+      sheet = spreadsheet.insertSheet("Eventos");
+      inicializarEventosDemo(sheet);
+    }
+    
+    const data = sheet.getDataRange().getValues();
+    const headers = data[0];
+    const activeEvents = [];
+    
+    for (let i = 1; i < data.length; i++) {
+      const row = data[i];
+      const event = {};
+      
+      for (let j = 0; j < headers.length; j++) {
+        const header = headers[j];
+        let val = row[j];
+        
+        // Formatear fechas para evitar problemas de zona horaria o de tipo en JS/React
+        if (val instanceof Date) {
+          val = val.toISOString().split('T')[0];
+        }
+        event[header] = val;
+      }
+      
+      // Validar si el evento está activo (compara si es "SÍ" o "SI" de manera tolerante)
+      const activoStr = event.activo ? event.activo.toString().toUpperCase().trim() : "";
+      if (activoStr === "SÍ" || activoStr === "SI") {
+        activeEvents.push(event);
+      }
+    }
+    
+    // Devolver JSON con CORS habilitado por Google
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "success",
+      eventos: activeEvents
+    })).setMimeType(ContentService.MimeType.JSON);
+    
+  } catch (error) {
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "error",
+      message: error.toString()
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+// ============================================================
+// FUNCIÓN AUXILIAR: Inicializar eventos por defecto
+// ============================================================
+
+function inicializarEventosDemo(sheet) {
+  const headers = ["id", "nombre", "fecha", "lugar", "limiteInscripcion", "sheetName", "horaPesaje", "activo"];
+  sheet.appendRow(headers);
+  
+  const demoEvents = [
+    [
+      "1", 
+      "Copa Regional del Pacífico 2026", 
+      "2026-07-12", 
+      "Polideportivo Alexis Argüello, Managua", 
+      "2026-07-06", 
+      "Pacífico_12-07-2026", 
+      "12:00 MD a 3:00 PM", 
+      "SÍ"
+    ],
+    [
+      "2", 
+      "Campeonato Departamental de León 2026", 
+      "2026-07-26", 
+      "Auditorio Ruiz Ayesta, León", 
+      "2026-07-20", 
+      "León_26-07-2026", 
+      "12:00 MD a 3:00 PM", 
+      "SÍ"
+    ],
+    [
+      "3", 
+      "Campeonato Regional del Sur 2026 (Rivas)", 
+      "2026-08-16", 
+      "Gimnasio Humberto Mendez, Rivas", 
+      "2026-08-10", 
+      "Sur_Rivas_16-08-2026", 
+      "12:00 MD a 3:00 PM", 
+      "SÍ"
+    ],
+    [
+      "4", 
+      "Copa Nacional de Fisicoculturismo FENIFISC 2026", 
+      "2026-08-30", 
+      "Centro de Convenciones Olof Palme, Managua", 
+      "2026-08-24", 
+      "Copa_Nacional_30-08-2026", 
+      "11:00 AM a 2:00 PM", 
+      "SÍ"
+    ]
+  ];
+  
+  for (let i = 0; i < demoEvents.length; i++) {
+    sheet.appendRow(demoEvents[i]);
+  }
+  
+  // Dar formato visual
+  sheet.getRange("A1:H1").setFontWeight("bold");
+  sheet.autoResizeColumns();
+}
+
+// ============================================================
+// FUNCIÓN PRINCIPAL POST: recibir datos del formulario e inscribir
 // ============================================================
 
 function doPost(e) {
   try {
     const payload = JSON.parse(e.postData.contents);
     
-    // Procesar fotos y obtener URLs
+    // Obtener carpeta principal y crear subcarpeta para el atleta
+    const parentFolder = DriveApp.getFolderById(MAIN_DRIVE_FOLDER_ID);
+    const athleteFolderName = `${payload.nombreCompleto.trim()} - ${payload.cedula.trim()}`;
+    const athleteFolder = parentFolder.createFolder(athleteFolderName);
+    const athleteFolderId = athleteFolder.getId();
+    
+    // Procesar fotos una sola vez y guardarlas en la carpeta del atleta
     const fotoSelfieUrl = procesarFoto(
       payload.fotoSelfie.base64, 
       `${payload.cedula}_selfie.jpg`,
-      DRIVE_FOLDERS.selfies
+      athleteFolderId
     );
     
     const fotoCedulaFrenteUrl = procesarFoto(
       payload.fotoCedulaFrente.base64,
       `${payload.cedula}_cedula_frente.jpg`,
-      DRIVE_FOLDERS.cedulaFrente
+      athleteFolderId
     );
     
     const fotoCedulaReversoUrl = procesarFoto(
       payload.fotoCedulaReverso.base64,
       `${payload.cedula}_cedula_reverso.jpg`,
-      DRIVE_FOLDERS.cedulaReverso
+      athleteFolderId
     );
     
-    // Preparar fila para Google Sheets
+    // Preparar fila común para Google Sheets
     const row = [
       payload.timestamp || new Date().toLocaleString("es-NI", { timeZone: "America/Managua" }),
       payload.nombreCompleto,
@@ -70,10 +186,20 @@ function doPost(e) {
       fotoCedulaReversoUrl
     ];
     
-    // Guardar en Google Sheets
-    agregarFila(row);
+    // Lista de eventos seleccionados enviados por el frontend
+    const eventosSeleccionados = payload.eventosSeleccionados || [];
     
-    // Enviar notificación (opcional)
+    if (eventosSeleccionados.length === 0) {
+      throw new Error("Debe seleccionar al menos una competencia para inscribirse");
+    }
+    
+    // Registrar en cada pestaña de evento escogido
+    for (let i = 0; i < eventosSeleccionados.length; i++) {
+      const evento = eventosSeleccionados[i];
+      agregarFila(row, evento.sheetName);
+    }
+    
+    // Enviar notificación al administrador consolidando los eventos elegidos
     if (ADMIN_EMAIL && ADMIN_EMAIL !== "tu_email@gmail.com") {
       enviarNotificacion(payload, fotoSelfieUrl);
     }
@@ -81,7 +207,7 @@ function doPost(e) {
     // Respuesta exitosa
     return ContentService.createTextOutput(JSON.stringify({
       status: "success",
-      message: "Inscripción registrada correctamente",
+      message: "Inscripción registrada correctamente en todos los eventos seleccionados",
       timestamp: new Date().toISOString()
     })).setMimeType(ContentService.MimeType.JSON);
     
@@ -148,18 +274,18 @@ function procesarFoto(base64String, nombreArchivo, folderId) {
 }
 
 // ============================================================
-// FUNCIÓN: Agregar fila a Google Sheets
+// FUNCIÓN: Agregar fila a una pestaña específica de Google Sheets
 // ============================================================
 
-function agregarFila(row) {
+function agregarFila(row, sheetName) {
   try {
     const spreadsheet = SpreadsheetApp.openById(SHEET_ID);
-    const sheet = spreadsheet.getSheetByName(SHEET_NAME);
+    let sheet = spreadsheet.getSheetByName(sheetName);
     
-    // Si la hoja no existe, crearla
+    // Si la hoja no existe, crearla dinámicamente
     if (!sheet) {
-      const newSheet = spreadsheet.insertSheet(SHEET_NAME);
-      setupSheet(newSheet);
+      sheet = spreadsheet.insertSheet(sheetName);
+      setupSheet(sheet);
     }
     
     // Obtener última fila y agregar nueva
@@ -167,10 +293,10 @@ function agregarFila(row) {
     const range = sheet.getRange(lastRow + 1, 1, 1, row.length);
     range.setValues([row]);
     
-    Logger.log(`Fila ${lastRow + 1} agregada exitosamente`);
+    Logger.log(`Fila ${lastRow + 1} agregada exitosamente en pestaña: ${sheetName}`);
     
   } catch (error) {
-    Logger.log("Error agregando fila: " + error);
+    Logger.log(`Error agregando fila en pestaña ${sheetName}: ` + error);
     throw error;
   }
 }
@@ -188,83 +314,47 @@ function setupSheet(sheet) {
   ];
   
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-  sheet.getRange("A1:X1").setFontWeight("bold");
+  sheet.getRange(1, 1, 1, headers.length).setFontWeight("bold");
   sheet.autoResizeColumns();
 }
 
 // ============================================================
-// FUNCIÓN: Enviar notificación por email
+// FUNCIÓN: Enviar notificación consolidada por email
 // ============================================================
 
 function enviarNotificacion(payload, fotoSelfieUrl) {
   try {
-    const asunto = `✅ Nueva Inscripción: ${payload.nombreCompleto}`;
+    const eventosNombres = payload.eventosSeleccionados.map(function(e) { return e.nombre; }).join(", ");
+    const asunto = `✅ Inscripción Multi-evento: ${payload.nombreCompleto}`;
+    
+    let eventosHtml = "<ul>";
+    payload.eventosSeleccionados.forEach(function(e) {
+      eventosHtml += `<li><strong>${e.nombre}</strong> (Pestaña: ${e.sheetName})</li>`;
+    });
+    eventosHtml += "</ul>";
+
     const cuerpo = `
       <h2>🏆 Inscripción Registrada - FENIFISC 2026</h2>
-      <p><strong>Evento:</strong> ${payload.evento || "Campeonato Departamental del Norte 2026"}</p>
       <p><strong>Atleta:</strong> ${payload.nombreCompleto}</p>
       <p><strong>Cédula:</strong> ${payload.cedula}</p>
-      <p><strong>Peso:</strong> ${payload.pesoActual} Kg</p>
-      <p><strong>Estatura:</strong> ${payload.estatura} Mt</p>
-      <p><strong>Team/Gym:</strong> ${payload.atletaLibre ? "Atleta Libre" : (payload.club || "No especificado")}</p>
-      <p><strong>Email:</strong> ${payload.email || "No proporcionado"}</p>
+      <p><strong>Eventos Inscritos:</strong></p>
+      ${eventosHtml}
+      <p><strong>Sexo:</strong> ${payload.sexo}</p>
       <p><strong>Teléfono:</strong> ${payload.telefono}</p>
-      <p><strong>Timestamp:</strong> ${payload.timestamp}</p>
+      <p><strong>Email:</strong> ${payload.email || "No proporcionado"}</p>
+      <p><strong>Club/Team:</strong> ${payload.atletaLibre ? "Atleta Libre" : (payload.club || "No especificado")}</p>
+      <p><strong>Peso Actual:</strong> ${payload.pesoActual} Kg</p>
+      <p><strong>Estatura:</strong> ${payload.estatura} Mt</p>
+      <p><strong>Contacto Emergencia:</strong> ${payload.contactoEmergencia} (${payload.telefonoEmergencia})</p>
       <hr>
       <p><em>📸 Fotos procesadas y almacenadas en Google Drive</em></p>
-      <p><a href="${fotoSelfieUrl}">Ver Selfie</a></p>
+      <p><a href="${fotoSelfieUrl}">Ver Selfie en Drive</a></p>
     `;
     
     MailApp.sendEmail(ADMIN_EMAIL, asunto, "", { htmlBody: cuerpo });
-    Logger.log("Notificación enviada a " + ADMIN_EMAIL);
+    Logger.log("Notificación unificada enviada a " + ADMIN_EMAIL);
     
   } catch (error) {
     Logger.log("Error enviando email: " + error);
-  }
-}
-
-// ============================================================
-// FUNCIÓN: Probar el script (opcional)
-// ============================================================
-
-function testScript() {
-  Logger.log("✅ Script de FENIFISC 2026 cargado correctamente");
-  Logger.log("📊 Sheet ID: " + SHEET_ID);
-  Logger.log("📁 Carpetas configuradas: " + Object.keys(DRIVE_FOLDERS).length);
-  Logger.log("📧 Email notificaciones: " + ADMIN_EMAIL);
-  Logger.log("⏰ Esperando requests POST...");
-}
-
-// ============================================================
-// FUNCIÓN: Obtener estadísticas (opcional)
-// ============================================================
-
-function getEstadisticas() {
-  try {
-    const spreadsheet = SpreadsheetApp.openById(SHEET_ID);
-    const sheet = spreadsheet.getSheetByName(SHEET_NAME);
-    
-    if (!sheet) return { error: "Hoja no encontrada" };
-    
-    const data = sheet.getDataRange().getValues();
-    const totalInscripciones = data.length - 1; // Restar encabezado
-    
-    // Contar por sexo
-    let masculinos = 0, femeninos = 0;
-    for (let i = 1; i < data.length; i++) {
-      if (data[i][3] === "M") masculinos++;
-      else if (data[i][3] === "F") femeninos++;
-    }
-    
-    return {
-      total: totalInscripciones,
-      masculinos: masculinos,
-      femeninos: femeninos,
-      fecha: new Date().toLocaleString("es-NI", { timeZone: "America/Managua" })
-    };
-    
-  } catch (error) {
-    Logger.log("Error obteniendo estadísticas: " + error);
-    return { error: error.toString() };
   }
 }
