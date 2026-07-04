@@ -899,10 +899,10 @@ export default function App() {
                       placeholder="Teléfono del coach"
                     />
                     <InputField
-                      label="Años de Experiencia con el Entrenador"
+                      label="Años de Experiencia del Entrenador"
                       value={form.experienciaEntrenador}
                       onChange={(v: any) => updateField("experienciaEntrenador", v)}
-                      placeholder="Ej: 2 años"
+                      placeholder="Ej: 5 años"
                     />
                   </>
                 )}
