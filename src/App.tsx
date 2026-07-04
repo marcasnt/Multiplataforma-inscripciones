@@ -506,10 +506,10 @@ export default function App() {
           />
         </div>
         <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-2 uppercase">
-          SISTEMA DE <span className="text-amber-500">INSCRIPCIÓN MULTIPLATAFORMA</span>
+          SISTEMA MULTI <span className="text-amber-500">INSCRIPCIÓN 2026</span>
         </h1>
-        <p className="text-amber-200/60 font-bold tracking-[0.5em] uppercase text-sm">FENIFISC 2026</p>
-        <p className="text-amber-200/50 italic text-sm mb-1">Inscripción para competencias oficiales de Julio y Agosto</p>
+        <p className="text-amber-200/60 font-bold tracking-[0.5em] uppercase text-sm">FENIFISC</p>
+        <p className="text-amber-200/50 italic text-sm mb-1">Inscripción para competencias oficiales de la federación</p>
       </header>
 
       {/* Main Content */}
@@ -543,7 +543,7 @@ export default function App() {
                 <Trophy className="text-amber-500" /> Selección de Competencias
               </h2>
               <p className="text-gray-400 text-sm mb-6">
-                Selecciona una o más competencias en las que deseas participar en Julio y Agosto. Tus datos se agregarán a la base de datos de cada evento escogido.
+                Selecciona una o más competencias en las que deseas participar. Tus datos se agregarán a la base de datos de cada evento escogido.
               </p>
 
               {loadingEventos ? (
@@ -567,8 +567,9 @@ export default function App() {
                       const daysLeft = getDaysLeft(evt.limiteInscripcion);
                       
                       const dateObj = parseDateString(evt.fecha);
-                      const isAugust = dateObj ? dateObj.getMonth() === 7 : false;
-                      const monthBadgeColor = isAugust 
+                      const monthName = dateObj ? dateObj.toLocaleDateString('es-ES', { month: 'long' }) : "";
+                      const isEvenMonth = dateObj ? dateObj.getMonth() % 2 === 0 : false;
+                      const monthBadgeColor = isEvenMonth 
                         ? "bg-pink-500/15 border-pink-500/30 text-pink-400" 
                         : "bg-amber-500/15 border-amber-500/30 text-amber-400";
                       
@@ -596,9 +597,11 @@ export default function App() {
                         >
                           <div>
                             <div className="flex justify-between items-center mb-3">
-                              <span className={`text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 border rounded-full ${monthBadgeColor}`}>
-                                {isAugust ? "Agosto" : "Julio"}
-                              </span>
+                              {monthName && (
+                                <span className={`text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 border rounded-full ${monthBadgeColor}`}>
+                                  {monthName}
+                                </span>
+                              )}
 
                               {closed ? (
                                 <span className="text-[10px] font-extrabold uppercase bg-red-500/10 border border-red-500/30 text-red-400 px-3 py-1 rounded-full">
@@ -635,13 +638,16 @@ export default function App() {
                             </div>
                           </div>
 
-                          <div className="mt-auto pt-4 border-t border-gray-800/40 flex justify-between items-center">
-                            <span className="text-[10px] text-gray-500">
-                              Límite: {(() => {
-                                const limDate = parseDateString(evt.limiteInscripcion);
-                                return limDate ? limDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }) : "No disponible";
-                              })()}
-                            </span>
+                          <div className="mt-auto pt-4 border-t border-gray-800/40 flex items-center justify-between gap-3">
+                            <div className="flex items-center gap-1.5 bg-red-500/10 border border-red-500/20 px-3 py-1.5 rounded-xl text-red-400 font-bold text-[10px]">
+                              <AlertCircle className="w-3.5 h-3.5 text-red-400 shrink-0" />
+                              <span>
+                                Límite de inscripción: {(() => {
+                                  const limDate = parseDateString(evt.limiteInscripcion);
+                                  return limDate ? limDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : "No disponible";
+                                })()}
+                              </span>
+                            </div>
                             
                             {!closed && (
                               <div className={`w-6 h-6 rounded-md border flex items-center justify-center transition-all ${
