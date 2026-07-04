@@ -140,7 +140,9 @@ function inicializarEventosDemo(sheet) {
   
   // Dar formato visual
   sheet.getRange("A1:H1").setFontWeight("bold");
-  sheet.autoResizeColumns();
+  if (sheet.getLastColumn() > 0) {
+    sheet.autoResizeColumns(1, sheet.getLastColumn());
+  }
 }
 
 // ============================================================
@@ -333,7 +335,9 @@ function setupSheet(sheet) {
   
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
   sheet.getRange(1, 1, 1, headers.length).setFontWeight("bold");
-  sheet.autoResizeColumns();
+  if (sheet.getLastColumn() > 0) {
+    sheet.autoResizeColumns(1, sheet.getLastColumn());
+  }
 }
 
 // ============================================================
