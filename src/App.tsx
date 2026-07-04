@@ -270,8 +270,9 @@ export default function App() {
     sexo: "", telefono: "", email: "",
     departamento: "Matagalpa", ciudad: "", direccion: "",
     atletaLibre: false, club: "", entrenador: "",
+    telefonoEntrenador: "", experienciaEntrenador: "",
     pesoActual: "", estatura: "",
-    contactoEmergencia: "", telefonoEmergencia: "",
+    contactoEmergencia: "", telefonoEmergencia: "", parentesco: "",
     aceptaReglamento: false, aceptaHorario: false, autorizaDatos: false,
   });
 
@@ -349,6 +350,7 @@ export default function App() {
       if (!form.fechaNacimiento) newErrors.fechaNacimiento = "Fecha requerida";
       if (!form.sexo) newErrors.sexo = "Seleccione sexo";
       if (!form.telefono) newErrors.telefono = "Teléfono requerido";
+      if (!form.direccion) newErrors.direccion = "La dirección es obligatoria";
     } else if (step === 2) {
       if (!form.atletaLibre && !form.club) newErrors.club = "Especifique club o marque Atleta Libre";
       if (!form.pesoActual) newErrors.pesoActual = "Peso requerido";
@@ -359,6 +361,7 @@ export default function App() {
       if (!photos.cedulaReverso.file) newErrors.cedulaReverso = "Foto de reverso obligatoria";
     } else if (step === 4) {
       if (!form.contactoEmergencia) newErrors.contactoEmergencia = "Requerido";
+      if (!form.parentesco) newErrors.parentesco = "Requerido";
       if (!form.telefonoEmergencia) newErrors.telefonoEmergencia = "Requerido";
       if (!form.aceptaReglamento) newErrors.aceptaReglamento = "Debe aceptar";
       if (!form.aceptaHorario) newErrors.aceptaHorario = "Debe aceptar";
@@ -834,6 +837,16 @@ export default function App() {
                   onChange={(v: any) => updateField("ciudad", v)}
                   placeholder="Ej: Managua"
                 />
+                <div className="md:col-span-2">
+                  <InputField
+                    label="Dirección Domiciliaria"
+                    required
+                    value={form.direccion}
+                    onChange={(v: any) => updateField("direccion", v)}
+                    error={errors.direccion}
+                    placeholder="Dirección exacta de residencia (calle, barrio, etc.)"
+                  />
+                </div>
               </div>
             </div>
           )}
@@ -878,6 +891,18 @@ export default function App() {
                       value={form.entrenador}
                       onChange={(v: any) => updateField("entrenador", v)}
                       placeholder="Nombre del coach"
+                    />
+                    <InputField
+                      label="Teléfono del Entrenador"
+                      value={form.telefonoEntrenador}
+                      onChange={(v: any) => updateField("telefonoEntrenador", v)}
+                      placeholder="Teléfono del coach"
+                    />
+                    <InputField
+                      label="Años de Experiencia con el Entrenador"
+                      value={form.experienciaEntrenador}
+                      onChange={(v: any) => updateField("experienciaEntrenador", v)}
+                      placeholder="Ej: 2 años"
                     />
                   </>
                 )}
@@ -975,7 +1000,7 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6 mb-8">
+              <div className="grid md:grid-cols-3 gap-6 mb-8">
                 <InputField
                   label="Contacto de Emergencia"
                   required
@@ -983,6 +1008,14 @@ export default function App() {
                   onChange={(v: any) => updateField("contactoEmergencia", v)}
                   error={errors.contactoEmergencia}
                   placeholder="Nombre de familiar"
+                />
+                <InputField
+                  label="Parentesco / Relación"
+                  required
+                  value={form.parentesco}
+                  onChange={(v: any) => updateField("parentesco", v)}
+                  error={errors.parentesco}
+                  placeholder="Ej: Mamá, Papá, Esposa..."
                 />
                 <InputField
                   label="Teléfono Emergencia"
