@@ -120,11 +120,42 @@ const fileToBase64 = (file: File): Promise<string> => {
   });
 };
 
+const parseDateString = (dateStr: any): Date | null => {
+  if (!dateStr) return null;
+  if (dateStr instanceof Date) return dateStr;
+  
+  const str = String(dateStr).trim();
+  
+  // Formato YYYY-MM-DD
+  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+    const [y, m, d] = str.split('-').map(Number);
+    return new Date(y, m - 1, d);
+  }
+  
+  // Formato DD/MM/YYYY o D/M/YYYY
+  if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(str)) {
+    const [d, m, y] = str.split('/').map(Number);
+    return new Date(y, m - 1, d);
+  }
+
+  // Formato DD-MM-YYYY o D-M-YYYY
+  if (/^\d{1,2}-\d{1,2}-\d{4}$/.test(str)) {
+    const [d, m, y] = str.split('-').map(Number);
+    return new Date(y, m - 1, d);
+  }
+  
+  const parsed = new Date(str);
+  if (!isNaN(parsed.getTime())) return parsed;
+  
+  return null;
+};
+
 const isDeadlinePassed = (deadlineStr: string) => {
   try {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const deadline = new Date(deadlineStr);
+    const deadline = parseDateString(deadlineStr);
+    if (!deadline) return false;
     deadline.setHours(23, 59, 59, 999);
     return today > deadline;
   } catch (e) {
@@ -136,7 +167,8 @@ const getDaysLeft = (deadlineStr: string) => {
   try {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const deadline = new Date(deadlineStr);
+    const deadline = parseDateString(deadlineStr);
+    if (!deadline) return -1;
     deadline.setHours(0, 0, 0, 0);
     const diffTime = deadline.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -420,7 +452,10 @@ export default function App() {
               {eventos.filter(e => eventosSeleccionados.includes(e.id)).map(e => (
                 <li key={e.id} className="text-white text-xs font-semibold flex items-start gap-2">
                   <Check className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
-                  <span>{e.nombre} ({new Date(e.fecha + "T00:00:00").toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })})</span>
+                  <span>{e.nombre} ({(() => {
+                    const sDate = parseDateString(e.fecha);
+                    return sDate ? sDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }) : "No disponible";
+                  })()})</span>
                 </li>
               ))}
             </ul>
@@ -531,14 +566,14 @@ export default function App() {
                       const closed = isDeadlinePassed(evt.limiteInscripcion);
                       const daysLeft = getDaysLeft(evt.limiteInscripcion);
                       
-                      const isAugust = evt.fecha.includes("-08-");
+                      const dateObj = parseDateString(evt.fecha);
+                      const isAugust = dateObj ? dateObj.getMonth() === 7 : false;
                       const monthBadgeColor = isAugust 
                         ? "bg-pink-500/15 border-pink-500/30 text-pink-400" 
                         : "bg-amber-500/15 border-amber-500/30 text-amber-400";
                       
-                      const dateObj = new Date(evt.fecha + "T00:00:00");
                       const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
-                      const fechaFormatted = dateObj.toLocaleDateString('es-ES', options);
+                      const fechaFormatted = dateObj ? dateObj.toLocaleDateString('es-ES', options) : "Fecha no disponible";
 
                       return (
                         <div
@@ -602,7 +637,10 @@ export default function App() {
 
                           <div className="mt-auto pt-4 border-t border-gray-800/40 flex justify-between items-center">
                             <span className="text-[10px] text-gray-500">
-                              Límite: {new Date(evt.limiteInscripcion + "T00:00:00").toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
+                              Límite: {(() => {
+                                const limDate = parseDateString(evt.limiteInscripcion);
+                                return limDate ? limDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }) : "No disponible";
+                              })()}
                             </span>
                             
                             {!closed && (
@@ -922,7 +960,10 @@ export default function App() {
                   {eventos.filter(e => eventosSeleccionados.includes(e.id)).map(e => (
                     <div key={e.id} className="flex justify-between items-center text-xs text-gray-300 border-b border-gray-800/50 pb-2 last:border-0 last:pb-0">
                       <span className="font-semibold text-white">{e.nombre}</span>
-                      <span className="text-amber-400/80">{new Date(e.fecha + "T00:00:00").toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</span>
+                      <span className="text-amber-400/80">{(() => {
+                        const evtDate = parseDateString(e.fecha);
+                        return evtDate ? evtDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }) : "No disponible";
+                      })()}</span>
                     </div>
                   ))}
                 </div>
