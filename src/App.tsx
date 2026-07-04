@@ -23,7 +23,7 @@ import {
 // ============================================================
 // CONFIGURATION & CONSTANTS
 // ============================================================
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxyYRPtN0Z8_T1IC3hTVt1NIYS89bCabmPHbuLwK0ycKrHPC_UaS79Z5zjLc_XeybiE/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyvmD8M5djPXvUz1idWXaS7dAZiMmoiG5lp9VyJ3GZGA0ti0eo71CMTgGvRIXuaPqNV/exec";
 
 interface EventoConvocado {
   id: string;
